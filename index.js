@@ -58,22 +58,29 @@ function clienteIdCheck(){
 
 async function sendMessage(){
     let messageSent = document.getElementById("messageInput")
-    console.log(messageSent.value)
+    if(messageSent.value == ""){
+        console.log("Envia un mensaje")
+        return
+    }
     let timenow = Date.now()
     await addDoc(collection(db,"messages"),{
         "text" : messageSent.value,
         "userId" : String(clienteID),
         "timestamp" : timenow
     })
+    document.getElementById("messageInput").value =""
+
 }
 
 
 function setUpListenerSnapshot(){
     onSnapshot(collection(db,"messages"), (snapshot) => {
-    snapshot.forEach(doc => {
-        let msg = document.createElement("p")
-        msg.textContent = `${doc.id} > ${doc.data().text}`
-        document.getElementById("chat").appendChild(msg)
+    snapshot.docChanges().forEach(change => {
+        if (change.type === "added"){
+            let msg = document.createElement("p")
+            msg.textContent = `> ${change.doc.data().text}`
+            document.getElementById("chat").appendChild(msg)
+        }
     });
 })
 }
