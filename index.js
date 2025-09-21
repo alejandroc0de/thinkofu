@@ -37,13 +37,19 @@ const db = getFirestore(app);
 
 //---------------------- M ------------------------------------
 let clienteID;
+let clienteName;
+let askNameEle;
 
 setUpListenerSnapshot()
 clienteIdCheck()
+showInputName()
 
-
+const submitNameBoton = document.getElementById("submitName")
+submitNameBoton.addEventListener("click", getName)
 const botonSubmit = document.getElementById("botonSubmit")
 botonSubmit.addEventListener("click", sendMessage)
+const chatDiv = document.getElementById("chat")
+chatDiv.scrollTop = chatDiv.scrollHeight;
 
 
 function clienteIdCheck(){
@@ -64,13 +70,35 @@ async function sendMessage(){
     }
     let timenow = Date.now()
     await addDoc(collection(db,"messages"),{
+        "nameClient" : clienteName,
         "text" : messageSent.value,
         "userId" : String(clienteID),
         "timestamp" : timenow
     })
     document.getElementById("messageInput").value =""
-
 }
+
+function getName(){
+    let nameGiven = document.getElementById("nameGiven").value
+    console.log(nameGiven)
+    if(nameGiven == null || nameGiven == ""){
+        return
+    }else{
+        clienteName = nameGiven
+        localStorage.setItem("userName", clienteName)
+        askNameEle.classList.remove("show")
+    }
+}
+
+function showInputName(){
+    if(localStorage.getItem("userName")==null){
+        askNameEle = document.querySelector(".askName")
+        askNameEle.classList.add("show")
+    }else{
+        clienteName = localStorage.getItem("userName")
+    }
+}
+
 
 
 function setUpListenerSnapshot(){
@@ -78,7 +106,7 @@ function setUpListenerSnapshot(){
     snapshot.docChanges().forEach(change => {
         if (change.type === "added"){
             let msg = document.createElement("p")
-            msg.textContent = `> ${change.doc.data().text}`
+            msg.textContent = `${change.doc.data().nameClient}: ${change.doc.data().text}`
             document.getElementById("chat").appendChild(msg)
         }
     });
