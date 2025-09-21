@@ -16,7 +16,33 @@ messagingSenderId: "612043825187",
 appId: "1:612043825187:web:961b037fa18bbe4cdc1196",
 measurementId: "G-GP321CS8PY"
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
+
+
+//---------------------- M ------------------------------------
+
+
+
+let clienteID;
+
+
+const botonSubmit = document.getElementById("botonSubmit")
+botonSubmit.addEventListener("click", sendMessage)
+clienteIdCheck()
+console.log(localStorage)
+
+function sendMessage(){
+    let messageSent = document.getElementById("messageInput")
+    console.log(messageSent.value)
+}
+
+function clienteIdCheck(){
+    if(localStorage.getItem("clienteId") == null){
+        clienteID = crypto.randomUUID()
+        localStorage.setItem("clienteId", clienteID)
+    }else{
+        console.log(localStorage)
+    }
+}
