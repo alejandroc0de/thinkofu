@@ -48,8 +48,7 @@ const submitNameBoton = document.getElementById("submitName")
 submitNameBoton.addEventListener("click", getName)
 const botonSubmit = document.getElementById("botonSubmit")
 botonSubmit.addEventListener("click", sendMessage)
-const chatDiv = document.getElementById("chat")
-chatDiv.scrollTop = chatDiv.scrollHeight;
+
 
 
 function clienteIdCheck(){
@@ -107,7 +106,11 @@ function setUpListenerSnapshot(){
         if (change.type === "added"){
             let msg = document.createElement("p")
             msg.textContent = `${change.doc.data().nameClient}: ${change.doc.data().text}`
-            document.getElementById("chat").appendChild(msg)
+            const chatDiv = document.getElementById("chat")
+            chatDiv.appendChild(msg)
+            requestAnimationFrame( () => {
+                chatDiv.scrollTop = chatDiv.scrollHeight;   
+            })
         }
     });
 })
