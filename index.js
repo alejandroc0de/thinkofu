@@ -49,7 +49,7 @@ let roomIdGlobal;
 
 
 clienteIdCheck()
-showInputName()
+showInputName(codeClientGlobal)
 
 
 const loginPageSubmitButton = document.getElementById("loginPageSubmit")
@@ -91,6 +91,11 @@ async function checkClientCode(){
             partner : null,
             partnerName : null
         });
+        let loginPageDiv = document.querySelector(".loginPage");
+        loginPageDiv.classList.remove("show");
+        loginPageDiv.classList.add("noShow");
+        let mainPageDiv = document.getElementById("mainPage")
+        mainPageDiv.classList.remove("noShow")
         showInputName(codeClient)
     }
     showPartnerInfo()
@@ -134,6 +139,7 @@ async function getName(){
         await setDoc(usuarioRef,{nameUser : clienteName},{merge:true})
         askNameEle.classList.remove("show")
     }
+    showInputName(codeClientGlobal)
 }
 
 async function showInputName(codeClient){
