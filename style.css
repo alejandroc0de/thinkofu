@@ -82,6 +82,15 @@ body{
     font-size: 1.3rem;
     font-family: monospace;
 }
+.showWelcome{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 1.3rem;
+    font-family: monospace;
+    color: rgb(0, 0, 0);
+
+}
 
 #botonSubmit,#submitName{
     width: 90px;
@@ -111,6 +120,27 @@ body{
     font-size: 1rem;
 }
 
+#divFindPartner{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+#butonfindPartner{
+    font-size: 1rem;
+    border: none;
+    background-color: rgba(245, 217, 222, 0.495);
+    border-radius: 20px;
+    width: 200px;
+    height: 60px;
+}
+
+#butonfindPartner:hover {
+    background-color: rgba(243, 203, 211, 0.581);
+}
+#butonfindPartner:active {
+    background-color: rgba(243, 203, 211, 0.852);
+}
 
 
 

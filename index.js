@@ -83,6 +83,7 @@ async function checkClientCode(){
         console.log("User no existe, creando usuario..")
         await setDoc(usuarioRef,{
             nameUser : "Annon",
+            codeUser : codeClientGlobal,
             createdAt : Date.now(),
             partner : null
         });
@@ -137,36 +138,41 @@ async function showInputName(codeClient){
         askNameEle = document.querySelector(".askName")
         askNameEle.classList.add("show")
     }else{
-        console.log(usuarioData.data().nameUser)
+        let welcome = document.createElement("p")
+        console.log(usuarioData.data())
+        welcome.textContent = `Welcome ${usuarioData.data().nameUser} - Your thinkofu code is ${usuarioData.data().codeUser}`
+        welcome.classList.add("showWelcome")
+        const mainPageDiv1 = document.getElementById("welcomeText")
+        mainPageDiv1.prepend(welcome)
 }
 }
-
 
 
 function setUpListenerSnapshot(){
     onSnapshot(collection(db,"messages"), async (snapshot) => {
-    for (let change of snapshot.docChanges()) {
-        if (change.type === "added"){
+        for (let change of snapshot.docChanges()) {
+            if (change.type === "added"){
 
-            const data = change.doc.data();
-            const userId = data.userId;
+                const data = change.doc.data();
+                const userId = data.userId;
 
-            const usuarioRef = doc(db,"users",userId)
-            const usuarioData = await getDoc(usuarioRef)
-            let nameClient = "Anon";
+                const usuarioRef = doc(db,"users",userId)
+                const usuarioData = await getDoc(usuarioRef)
+                let nameClient = "Anon";
 
-            if(usuarioData.exists()){
-                nameClient = usuarioData.data().nameUser
+                if(usuarioData.exists()){
+                    nameClient = usuarioData.data().nameUser
+                }
+
+                let msg = document.createElement("p")
+                msg.textContent = `${nameClient}: ${change.doc.data().text}`
+                const chatDiv = document.getElementById("chat")
+                chatDiv.appendChild(msg)
+
+                requestAnimationFrame(() => {
+                    chatDiv.scrollTop = chatDiv.scrollHeight;   
+                });
             }
-
-            let msg = document.createElement("p")
-            msg.textContent = `${nameClient}: ${change.doc.data().text}`
-            const chatDiv = document.getElementById("chat")
-            chatDiv.appendChild(msg)
-
-            requestAnimationFrame(() => {
-                chatDiv.scrollTop = chatDiv.scrollHeight;   
-            });
         }
-    }
-})};
+    })
+}
