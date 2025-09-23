@@ -102,12 +102,31 @@ body{
     font-family: monospace;
 }
 
+#divButtonThinkofu{
+    display: flex;
+    flex-direction: column;
+}
+#buttonThinkofu{
+    font-family: "Comic Sans MS", cursive,sans-serif;
+    align-self: center;
+    font-size: 2rem;
+    border-radius: 400px;
+    width: 200px;
+    height: 200px;
+    border: none;
+    background-color: hsl(353, 83%, 79%);
+    transition: background-color 1.5s ease;
+}
+#buttonThinkofu:active{
+    background-color: hsl(350, 94%, 72%);;
+}
+
 #chat{
     margin-top: 40px;
     display: flex;
     flex-direction: column;
     border: 2px solid rgba(0, 0, 0, 0.426);
-    height: 70vh;
+    height: 50vh;
     width: 40vh;
     overflow-y: auto;
     border-radius: 20px;

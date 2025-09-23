@@ -42,6 +42,7 @@ const db = getFirestore(app);
 
 let clienteID;
 let clienteName;
+let clienteNameGlobal;
 let askNameEle;
 let codeClientGlobal;
 let roomIdGlobal; 
@@ -60,8 +61,8 @@ const botonSubmit = document.getElementById("botonSubmit")
 botonSubmit.addEventListener("click", sendMessage)
 const botonFindPartner = document.getElementById("butonfindPartner")
 botonFindPartner.addEventListener("click",findPartner)
-
-
+const botonHeart = document.getElementById("buttonThinkofu")
+botonHeart.addEventListener("mousedown",thinkinofu)
 
 async function checkClientCode(){
     let codeClient; 
@@ -151,7 +152,8 @@ async function showInputName(codeClient){
     }else{
         let welcome = document.createElement("p")
         console.log(usuarioData.data())
-        welcome.textContent = `Welcome ${usuarioData.data().nameUser} - Your thinkofu code is ${usuarioData.data().codeUser}`
+        clienteNameGlobal = usuarioData.data().nameUser
+        welcome.textContent = `Welcome ${clienteNameGlobal} - Your thinkofu code is ${usuarioData.data().codeUser}`
         welcome.classList.add("showWelcome")
         const mainPageDiv1 = document.getElementById("welcomeText")
         mainPageDiv1.prepend(welcome)
@@ -166,6 +168,10 @@ function setUpListenerSnapshot(){
 
                 const data = change.doc.data();
                 const userId = data.userId;
+                const fecha = new Date(data.timestamp)
+                const hora = fecha.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})
+                const dia = fecha.toLocaleDateString([], {weekday:'short'})
+
 
                 const usuarioRef = doc(db,"users",userId) 
                 const usuarioData = await getDoc(usuarioRef)
@@ -176,7 +182,7 @@ function setUpListenerSnapshot(){
                 }
 
                 let msg = document.createElement("p")
-                msg.textContent = `${nameClient}: ${change.doc.data().text}`
+                msg.textContent = `${dia} ${hora} - ${nameClient}: ${change.doc.data().text}`
                 const chatDiv = document.getElementById("chat")
                 chatDiv.appendChild(msg)
 
@@ -244,4 +250,13 @@ async function showPartnerInfo(){
 
 function createRoomId(userCode,partnerCode){
     return[userCode,partnerCode].sort().join()
+}
+
+async function thinkinofu(){
+    const timeNow = Date.now()
+    await addDoc(collection(db,"rooms",roomIdGlobal,"messages"),{
+        text:`${clienteNameGlobal} is thinking of you ♡ `,
+        userId : codeClientGlobal,
+        timestamp: timeNow
+    })
 }
