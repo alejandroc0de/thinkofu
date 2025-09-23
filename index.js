@@ -57,6 +57,8 @@ const submitNameBoton = document.getElementById("submitName")
 submitNameBoton.addEventListener("click", getName)
 const botonSubmit = document.getElementById("botonSubmit")
 botonSubmit.addEventListener("click", sendMessage)
+const botonFindPartner = document.getElementById("butonfindPartner")
+botonFindPartner.addEventListener("click",findPartner)
 
 
 
@@ -85,10 +87,12 @@ async function checkClientCode(){
             nameUser : "Annon",
             codeUser : codeClientGlobal,
             createdAt : Date.now(),
-            partner : null
+            partner : null,
+            partnerName : null
         });
         showInputName(codeClientGlobal)
     }
+    showPartnerInfo()
 }
 
 
@@ -175,4 +179,47 @@ function setUpListenerSnapshot(){
             }
         }
     })
+}
+
+async function findPartner(){
+    let codePartner = document.getElementById("findPartnerInput").value
+    if(!codePartner){
+        console.log("Partner id is incorrect")
+        return
+    }
+
+    const usuarioRef = doc(db,"users",codeClientGlobal);
+    const usuarioData = await getDoc(usuarioRef)
+    const nameUsuario = usuarioData.data().nameUser
+
+    const partnerRef = doc(db,"users",codePartner);
+    const partnerData = await getDoc(partnerRef);
+    const namePartner = partnerData.data().nameUser
+
+
+    if(partnerData.exists()){
+        await setDoc(usuarioRef, {partner: codePartner, partnerName: namePartner},{merge:true});
+        await setDoc(partnerRef, {partner: codeClientGlobal, partnerName:nameUsuario},{merge:true})
+        let divFindPartner = document.getElementById("divFindPartner")
+        divFindPartner.classList.add("noShow")         
+        showPartnerInfo() 
+    } 
+}
+
+async function showPartnerInfo(){
+    const usuarioRef = doc(db,"users",codeClientGlobal);
+    const usuarioData = await getDoc(usuarioRef)
+    if(!usuarioData.data().partner){
+        
+    }
+    else{
+        const divFindPartner = document.getElementById("divFindPartner")
+        divFindPartner.classList.add("noShow")
+        let showPartnerText = document.createElement("p")
+        showPartnerText.classList.add("showWelcome")
+        showPartnerText.textContent = `Partner : ${usuarioData.data().partnerName}`
+        let welcomeTextDiv = document.getElementById("welcomeText")
+        welcomeTextDiv.appendChild(showPartnerText)
+    }
+
 }
