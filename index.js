@@ -6,6 +6,9 @@ import{
     getFirestore,
     collection,
     addDoc,
+    setDoc,
+    doc,
+    getDoc,
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -36,19 +39,51 @@ const db = getFirestore(app);
 
 
 //---------------------- M ------------------------------------
+
 let clienteID;
 let clienteName;
 let askNameEle;
+
 
 setUpListenerSnapshot()
 clienteIdCheck()
 showInputName()
 
+
+const loginPageSubmitButton = document.getElementById("loginPageSubmit")
+loginPageSubmitButton.addEventListener("click",checkClientCode)
 const submitNameBoton = document.getElementById("submitName")
 submitNameBoton.addEventListener("click", getName)
 const botonSubmit = document.getElementById("botonSubmit")
 botonSubmit.addEventListener("click", sendMessage)
 
+
+
+async function checkClientCode(){
+    let codeClient; 
+    codeClient = document.getElementById("loginPageIdInput").value.trim()
+
+    if(!codeClient){
+        return
+    }
+
+    const usuarioRef = doc(db,"users",codeClient)
+    const usuarioData = await getDoc(usuarioRef)
+    if(usuarioData.exists()){
+        console.log("usuario existe ")
+        let loginPageDiv = document.querySelector(".loginPage");
+        loginPageDiv.classList.remove("show");
+        loginPageDiv.classList.add("noShow");
+        let mainPageDiv = document.getElementById("mainPage")
+        mainPageDiv.classList.remove("noShow")
+    }else{
+        console.log("User no existe, creando usuario..")
+        await setDoc(usuarioRef,{
+            createdAt : Date.now(),
+            partner : null
+        });
+    }
+}
 
 
 function clienteIdCheck(){

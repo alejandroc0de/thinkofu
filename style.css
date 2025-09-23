@@ -1,5 +1,6 @@
-.no-show{
-    display: none;
+.noShow{
+    display: none !important;
+    box-shadow: none;
 }
 .show{
     display: flex;
@@ -10,28 +11,51 @@
 .loginPage{
     display: flex;
     flex-direction: column;
-    background-color: hsl(0, 49%, 76%);
     font-family: "Comic Sans MS", cursive,sans-serif;
+    gap: 200px;
+}
+.loginPage #h1Login{
+    font-size: 5rem;
+    text-align: center;
 }
 
-.loginPage #loginPageIdInput{
-    width: 500px;
+#loginPageIdInput{
+    width: 600px;
+    height: 55px;
     font-size: 3rem;
     border-radius: 20px;
     border: none;
+    box-shadow: 2px 2px 2px 2px rgb(111, 154, 169);
 }
 .loginPage #loginPageSubmit{
+    align-self: center;
+    align-content: center;
+    width: 400px;
     background-color: aliceblue;
     font-size: 3rem;
     border: none;
     border-radius: 30px;
-    box-shadow: 2px 2px 2px 2px hsl(0, 49%, 76%);
+    box-shadow: 2px 2px 2px 2px rgb(111, 154, 169);
 }
 
+.loginPage #h1Login:hover{
+    transition: transform 0.3s ease;
+    transform: scale(1.1);
+}
 
+.loginPage #loginPageIdInput:hover{
+    transition: transform 0.3s ease;
+    transform: scale(1.1);
+}
+.loginPage #loginPageSubmit:hover{
+    background-color: hsl(209, 61%, 92%);
+    transition: transform 0.3s ease;
+    transform: scale(1.1);
+}
 
-
-
+.loginPage #loginPageSubmit:active{
+    background-color: hsl(207, 73%, 90%);
+}
 
 
 /* ------------------- Main Page ----------------*/
