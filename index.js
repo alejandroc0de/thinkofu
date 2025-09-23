@@ -43,6 +43,7 @@ const db = getFirestore(app);
 let clienteID;
 let clienteName;
 let askNameEle;
+let codeClientGlobal;
 
 
 setUpListenerSnapshot()
@@ -66,6 +67,7 @@ async function checkClientCode(){
     if(!codeClient){
         return
     }
+    codeClientGlobal = codeClient
 
     const usuarioRef = doc(db,"users",codeClient)
     const usuarioData = await getDoc(usuarioRef)
@@ -76,12 +78,15 @@ async function checkClientCode(){
         loginPageDiv.classList.add("noShow");
         let mainPageDiv = document.getElementById("mainPage")
         mainPageDiv.classList.remove("noShow")
+        showInputName(codeClientGlobal)
     }else{
         console.log("User no existe, creando usuario..")
         await setDoc(usuarioRef,{
+            nameUser : "Annon",
             createdAt : Date.now(),
             partner : null
         });
+        showInputName(codeClientGlobal)
     }
 }
 
@@ -104,49 +109,64 @@ async function sendMessage(){
     }
     let timenow = Date.now()
     await addDoc(collection(db,"messages"),{
-        "nameClient" : clienteName,
         "text" : messageSent.value,
-        "userId" : String(clienteID),
+        "userId" : String(codeClientGlobal),
         "timestamp" : timenow
     })
+
     document.getElementById("messageInput").value =""
 }
 
-function getName(){
+async function getName(){
     let nameGiven = document.getElementById("nameGiven").value
     console.log(nameGiven)
     if(nameGiven == null || nameGiven == ""){
         return
     }else{
         clienteName = nameGiven
-        localStorage.setItem("userName", clienteName)
+        const usuarioRef = doc(db,"users",codeClientGlobal)
+        await setDoc(usuarioRef,{nameUser : clienteName},{merge:true})
         askNameEle.classList.remove("show")
     }
 }
 
-function showInputName(){
-    if(localStorage.getItem("userName")==null){
+async function showInputName(codeClient){
+    const usuarioRef = doc(db,"users",codeClient)
+    const usuarioData = await getDoc(usuarioRef)
+    if(!usuarioData.exists() || usuarioData.data().nameUser === "Annon" ) {
         askNameEle = document.querySelector(".askName")
         askNameEle.classList.add("show")
     }else{
-        clienteName = localStorage.getItem("userName")
-    }
+        console.log(usuarioData.data().nameUser)
+}
 }
 
 
 
 function setUpListenerSnapshot(){
-    onSnapshot(collection(db,"messages"), (snapshot) => {
-    snapshot.docChanges().forEach(change => {
+    onSnapshot(collection(db,"messages"), async (snapshot) => {
+    for (let change of snapshot.docChanges()) {
         if (change.type === "added"){
+
+            const data = change.doc.data();
+            const userId = data.userId;
+
+            const usuarioRef = doc(db,"users",userId)
+            const usuarioData = await getDoc(usuarioRef)
+            let nameClient = "Anon";
+
+            if(usuarioData.exists()){
+                nameClient = usuarioData.data().nameUser
+            }
+
             let msg = document.createElement("p")
-            msg.textContent = `${change.doc.data().nameClient}: ${change.doc.data().text}`
+            msg.textContent = `${nameClient}: ${change.doc.data().text}`
             const chatDiv = document.getElementById("chat")
             chatDiv.appendChild(msg)
-            requestAnimationFrame( () => {
+
+            requestAnimationFrame(() => {
                 chatDiv.scrollTop = chatDiv.scrollHeight;   
-            })
+            });
         }
-    });
-})
-}
+    }
+})};
