@@ -44,9 +44,10 @@ let clienteID;
 let clienteName;
 let askNameEle;
 let codeClientGlobal;
+let roomIdGlobal; 
 
 
-setUpListenerSnapshot()
+
 clienteIdCheck()
 showInputName()
 
@@ -85,12 +86,12 @@ async function checkClientCode(){
         console.log("User no existe, creando usuario..")
         await setDoc(usuarioRef,{
             nameUser : "Annon",
-            codeUser : codeClientGlobal,
+            codeUser : codeClient,
             createdAt : Date.now(),
             partner : null,
             partnerName : null
         });
-        showInputName(codeClientGlobal)
+        showInputName(codeClient)
     }
     showPartnerInfo()
 }
@@ -113,7 +114,7 @@ async function sendMessage(){
         return
     }
     let timenow = Date.now()
-    await addDoc(collection(db,"messages"),{
+    await addDoc(collection(db,"rooms", roomIdGlobal, "messages"),{
         "text" : messageSent.value,
         "userId" : String(codeClientGlobal),
         "timestamp" : timenow
@@ -153,14 +154,14 @@ async function showInputName(codeClient){
 
 
 function setUpListenerSnapshot(){
-    onSnapshot(collection(db,"messages"), async (snapshot) => {
+    onSnapshot(collection(db,"rooms",roomIdGlobal,"messages"), async (snapshot) => {
         for (let change of snapshot.docChanges()) {
             if (change.type === "added"){
 
                 const data = change.doc.data();
                 const userId = data.userId;
 
-                const usuarioRef = doc(db,"users",userId)
+                const usuarioRef = doc(db,"users",userId) 
                 const usuarioData = await getDoc(usuarioRef)
                 let nameClient = "Anon";
 
@@ -222,4 +223,19 @@ async function showPartnerInfo(){
         welcomeTextDiv.appendChild(showPartnerText)
     }
 
+    const codePartner = usuarioData.data().partner
+    roomIdGlobal = (createRoomId(codeClientGlobal,codePartner))
+    const roomRef = doc(db, "rooms", roomIdGlobal)
+
+    await setDoc(roomRef, {
+        users : [codeClientGlobal, codePartner],
+        createdAt : Date.now()
+    }, {merge:true})
+    console.log(roomIdGlobal)
+    setUpListenerSnapshot()
+
+}
+
+function createRoomId(userCode,partnerCode){
+    return[userCode,partnerCode].sort().join()
 }
