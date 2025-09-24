@@ -101,6 +101,14 @@ body{
     font-size: 1.3rem;
     font-family: monospace;
 }
+#botonSubmit{
+    background-color: white;
+    height: 50px;
+    width: 50px;
+    font-size: 1.99rem;
+    border-radius: 100px;
+    margin-left: 30px;
+}
 
 #divButtonThinkofu{
     display: flex;
