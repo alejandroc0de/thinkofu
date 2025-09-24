@@ -52,17 +52,20 @@ let roomIdGlobal;
 clienteIdCheck()
 showInputName(codeClientGlobal)
 
+document.addEventListener("DOMContentLoaded", () => {
+    const loginPageSubmitButton = document.getElementById("loginPageSubmit")
+    loginPageSubmitButton.addEventListener("click",checkClientCode)
+    const submitNameBoton = document.getElementById("submitName")
+    submitNameBoton.addEventListener("click", getName)
+    const botonSubmit = document.getElementById("botonSubmit")
+    botonSubmit.addEventListener("click", sendMessage)
+    const botonFindPartner = document.getElementById("butonfindPartner")
+    botonFindPartner.addEventListener("click",findPartner)
+    const botonHeart = document.getElementById("buttonThinkofu")
+    botonHeart.addEventListener("mousedown",thinkinofu)
+})
 
-const loginPageSubmitButton = document.getElementById("loginPageSubmit")
-loginPageSubmitButton.addEventListener("click",checkClientCode)
-const submitNameBoton = document.getElementById("submitName")
-submitNameBoton.addEventListener("click", getName)
-const botonSubmit = document.getElementById("botonSubmit")
-botonSubmit.addEventListener("click", sendMessage)
-const botonFindPartner = document.getElementById("butonfindPartner")
-botonFindPartner.addEventListener("click",findPartner)
-const botonHeart = document.getElementById("buttonThinkofu")
-botonHeart.addEventListener("mousedown",thinkinofu)
+
 
 async function checkClientCode(){
     let codeClient; 
@@ -131,7 +134,6 @@ async function sendMessage(){
 
 async function getName(){
     let nameGiven = document.getElementById("nameGiven").value
-    console.log(nameGiven)
     if(nameGiven == null || nameGiven == ""){
         return
     }else{
@@ -139,6 +141,8 @@ async function getName(){
         const usuarioRef = doc(db,"users",codeClientGlobal)
         await setDoc(usuarioRef,{nameUser : clienteName},{merge:true})
         askNameEle.classList.remove("show")
+        const chat = document.getElementById("toHideIfNewCx")
+        chat.classList.remove("noShow")
     }
     showInputName(codeClientGlobal)
 }
@@ -149,6 +153,8 @@ async function showInputName(codeClient){
     if(!usuarioData.exists() || usuarioData.data().nameUser === "Annon" ) {
         askNameEle = document.querySelector(".askName")
         askNameEle.classList.add("show")
+        const chat = document.getElementById("toHideIfNewCx")
+        chat.classList.add("noShow")
     }else{
         let welcome = document.createElement("p")
         console.log(usuarioData.data())
@@ -253,7 +259,7 @@ function createRoomId(userCode,partnerCode){
 }
 
 async function thinkinofu(){
-    const timeNow = Date.now()
+    const timeNow = Date.now()   
     await addDoc(collection(db,"rooms",roomIdGlobal,"messages"),{
         text:`${clienteNameGlobal} is thinking of you ♡ `,
         userId : codeClientGlobal,

@@ -27,6 +27,10 @@
     border: none;
     box-shadow: 2px 2px 2px 2px rgb(111, 154, 169);
 }
+#loginPageIdInput::placeholder{
+    font-family: "Comic Sans MS", cursive,sans-serif;
+}
+
 .loginPage #loginPageSubmit{
     align-self: center;
     align-content: center;
@@ -46,6 +50,9 @@
 .loginPage #loginPageIdInput:hover{
     transition: transform 0.3s ease;
     transform: scale(1.1);
+}
+#loginPageSubmit{
+    font-family: "Comic Sans MS", cursive,sans-serif;
 }
 .loginPage #loginPageSubmit:hover{
     background-color: hsl(209, 61%, 92%);
@@ -82,27 +89,34 @@ body{
     font-size: 1.3rem;
     font-family: monospace;
 }
+#nameGiven{
+    background-color: rgba(255, 255, 255, 0.432);
+}
+
 .showWelcome{
     display: flex;
     flex-direction: column;
     text-align: center;
     font-size: 1.3rem;
-    font-family: monospace;
+    font-family: "Comic Sans MS", cursive,sans-serif;
     color: rgb(0, 0, 0);
 
 }
 
+#nameGiven::placeholder{
+    font-family: "Comic Sans MS", cursive,sans-serif;
+}
 #botonSubmit,#submitName{
     width: 90px;
     height: 30px;
     border-radius: 20px;
     border: none;
-    background-color: rgb(174, 173, 173);
+    background-color: hsl(353, 83%, 79%);
     font-size: 1.3rem;
-    font-family: monospace;
+    font-family: "Comic Sans MS", cursive,sans-serif;
 }
 #botonSubmit{
-    background-color: white;
+    background-color: hsl(353, 83%, 79%);
     height: 50px;
     width: 50px;
     font-size: 1.99rem;
@@ -128,7 +142,9 @@ body{
 #buttonThinkofu:active{
     background-color: hsl(350, 94%, 72%);;
 }
-
+#messageInput::placeholder{
+    font-family: "Comic Sans MS", cursive,sans-serif;
+}
 #chat{
     margin-top: 40px;
     display: flex;
@@ -142,11 +158,13 @@ body{
 }
 
 #chat p{
-    font-family: monospace;
+    font-family: "Comic Sans MS", cursive,sans-serif;
     margin: 10px 10px;
     font-size: 1rem;
 }
-
+#findPartnerInput{
+    font-family: "Comic Sans MS", cursive,sans-serif;
+}
 #divFindPartner{
     display: flex;
     width: 100%;
@@ -154,12 +172,15 @@ body{
     align-items: center;
 }
 #butonfindPartner{
+    margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 1rem;
     border: none;
-    background-color: rgba(245, 217, 222, 0.495);
+    background-color: hsl(353, 83%, 79%);
     border-radius: 20px;
     width: 200px;
     height: 60px;
+    font-family: "Comic Sans MS", cursive,sans-serif;
 }
 
 #butonfindPartner:hover {
@@ -178,7 +199,6 @@ body{
     width: 200px;
     height: 40px;
 }
-
 
 
 .askName{
